@@ -79,17 +79,99 @@ export interface LaptopRecommendation {
   aiInsight: string;
 }
 
+// Component Database with Indian Market Pricing (approx. 2024-2025)
+const cpuDatabase: PCComponent[] = [
+  { name: "CPU", model: "Intel Core i3-12100F", price: 8500, brand: "Intel", specs: "4C/8T, 3.3-4.3GHz, 58W TDP", whyChosen: "The king of ultra-budget gaming in India. Best 1080p value.", futureProof: 60 },
+  { name: "CPU", model: "AMD Ryzen 5 5600", price: 12500, brand: "AMD", specs: "6C/12T, 3.5-4.4GHz, 65W TDP", whyChosen: "Unmatched performance per rupee for mid-range Indian builds.", futureProof: 72 },
+  { name: "CPU", model: "Intel Core i5-13400F", price: 18500, brand: "Intel", specs: "10C/16T, 2.5-4.6GHz, DDR5 ready", whyChosen: "Excellent balance for multitasking and gaming at a great price.", futureProof: 80 },
+  { name: "CPU", model: "AMD Ryzen 5 7600X", price: 21500, brand: "AMD", specs: "6C/12T, 4.7-5.3GHz, AM5 platform", whyChosen: "Future-proof AM5 platform ensures an easy upgrade path until 2026+.", futureProof: 85 },
+  { name: "CPU", model: "AMD Ryzen 7 7700X", price: 31000, brand: "AMD", specs: "8C/16T, 4.5-5.4GHz, AM5 socket", whyChosen: "Ideal for engineers and heavy multitasking — handles stress with ease.", futureProof: 88 },
+  { name: "CPU", model: "Intel Core i7-14700K", price: 41000, brand: "Intel", specs: "20C/28T, up to 5.6GHz", whyChosen: "A beast for content creation and local AI model training.", futureProof: 90 },
+  { name: "CPU", model: "Intel Core i9-13900K", price: 54000, brand: "Intel", specs: "24C/32T, up to 5.8GHz", whyChosen: "India's top consumer CPU for AI/ML and 3D rendering workflows.", futureProof: 93 },
+  { name: "CPU", model: "AMD Ryzen 9 7950X", price: 62000, brand: "AMD", specs: "16C/32T, 4.5-5.7GHz, AM5", whyChosen: "The ultimate productivity monster for compilation and rendering.", futureProof: 95 },
+];
+
+const gpuDatabase: PCComponent[] = [
+  { name: "GPU", model: "NVIDIA GTX 1650", price: 13000, brand: "NVIDIA", specs: "4GB GDDR5, Entry Level", whyChosen: "The bare minimum for a display and light 1080p esports.", futureProof: 40 },
+  { name: "GPU", model: "AMD RX 6600 8GB", price: 19500, brand: "AMD", specs: "8GB GDDR6, 1080p beast", whyChosen: "Best value GPU in India right now. Beats everything under 20k.", futureProof: 65 },
+  { name: "GPU", model: "NVIDIA RTX 3060 12GB", price: 27500, brand: "NVIDIA", specs: "12GB GDDR6, DLSS support", whyChosen: "12GB VRAM is crucial for AI/ML and texture-heavy Indian servers.", futureProof: 75 },
+  { name: "GPU", model: "NVIDIA RTX 4060 8GB", price: 32000, brand: "NVIDIA", specs: "8GB GDDR6, DLSS 3.0", whyChosen: "DLSS 3 Frame Gen makes this highly future-proof for new AAA titles.", futureProof: 82 },
+  { name: "GPU", model: "NVIDIA RTX 4060 Ti 16GB", price: 44000, brand: "NVIDIA", specs: "16GB GDDR6, High VRAM", whyChosen: "The entry point for serious local LLM and Stable Diffusion work.", futureProof: 85 },
+  { name: "GPU", model: "NVIDIA RTX 4070 12GB", price: 54000, brand: "NVIDIA", specs: "12GB GDDR6X, 1440p King", whyChosen: "Professional grade value for 1440p gaming and AI workloads.", futureProof: 88 },
+  { name: "GPU", model: "NVIDIA RTX 4070 Ti Super", price: 78000, brand: "NVIDIA", specs: "16GB GDDR6X, 256-bit", whyChosen: "Exceptional for 4K and heavy AI training at a semi-pro budget.", futureProof: 90 },
+  { name: "GPU", model: "NVIDIA RTX 4080 Super", price: 98000, brand: "NVIDIA", specs: "16GB GDDR6X, Ultimate Power", whyChosen: "Best high-end GPU for professional VFX and deep learning in India.", futureProof: 94 },
+  { name: "GPU", model: "NVIDIA RTX 4090 24GB", price: 195000, brand: "NVIDIA", specs: "24GB GDDR6X, The Titan", whyChosen: "No compromises. The ultimate tool for India's next AI unicorn.", futureProof: 98 },
+];
+
+const ramDatabase: PCComponent[] = [
+  { name: "RAM", model: "Crucial 8GB DDR4", price: 2000, brand: "Crucial", specs: "DDR4-3200MHz", whyChosen: "Budget essential for general office and study work.", futureProof: 40 },
+  { name: "RAM", model: "Corsair Vengeance 16GB (8x2)", price: 4200, brand: "Corsair", specs: "DDR4-3200, Dual Channel", whyChosen: "The sweet spot for Indian gaming and student builds.", futureProof: 65 },
+  { name: "RAM", model: "G.Skill Ripjaws 32GB (16x2) DDR4", price: 8500, brand: "G.Skill", specs: "DDR4-3600, High Speed", whyChosen: "Required for heavy video editing and local development.", futureProof: 75 },
+  { name: "RAM", model: "Kingston Fury 16GB DDR5", price: 5800, brand: "Kingston", specs: "DDR5-5200MHz", whyChosen: "Entry point for the new AM5/LGA1700 DDR5 platforms.", futureProof: 85 },
+  { name: "RAM", model: "G.Skill Trident Z5 32GB DDR5", price: 11000, brand: "G.Skill", specs: "DDR5-6000, CL30", whyChosen: "Ultra-fast RAM for competitive gaming and AI inference.", futureProof: 90 },
+  { name: "RAM", model: "Corsair Vengeance 64GB (32x2) DDR5", price: 21000, brand: "Corsair", specs: "DDR5-5600, Massive Capacity", whyChosen: "Essential for training large models and professional virtualization.", futureProof: 95 },
+];
+
+const storageDatabase: PCComponent[] = [
+  { name: "Storage", model: "Crucial P3 500GB NVMe", price: 3200, brand: "Crucial", specs: "PCIe 3.0, 3500MB/s", whyChosen: "Blazing fast OS drive for an entry-level budget.", futureProof: 60 },
+  { name: "Storage", model: "Samsung 980 1TB NVMe", price: 6800, brand: "Samsung", specs: "PCIe 3.0, High Reliability", whyChosen: "Reliable Indian market favorite for daily drivers.", futureProof: 75 },
+  { name: "Storage", model: "WD Black SN850X 1TB", price: 9500, brand: "WD", specs: "PCIe 4.0, 7300MB/s", whyChosen: "One of the fastest drives for competitive load times.", futureProof: 88 },
+  { name: "Storage", model: "Samsung 990 Pro 2TB", price: 18500, brand: "Samsung", specs: "PCIe 4.0, The Best", whyChosen: "Professional grade storage for huge datasets and 4K video.", futureProof: 95 },
+];
+
+const mbDatabase: PCComponent[] = [
+  { name: "Motherboard", model: "MSI H610M-E", price: 6500, brand: "MSI", specs: "LGA1700, Budget", whyChosen: "Solid foundation for budget Intel builds.", futureProof: 50 },
+  { name: "Motherboard", model: "MSI B550M Pro-VDH WiFi", price: 9500, brand: "MSI", specs: "AM4, WiFi Built-in", whyChosen: "Best value motherboard in India with WiFi and Bluetooth.", futureProof: 65 },
+  { name: "Motherboard", model: "ASUS Prime B650M-A WiFi", price: 14500, brand: "ASUS", specs: "AM5, DDR5, WiFi 6", whyChosen: "Future-proof AM5 board for high-speed components.", futureProof: 85 },
+  { name: "Motherboard", model: "MSI MAG Z790 Tomahawk WiFi", price: 28000, brand: "MSI", specs: "LGA1700, High End", whyChosen: "Built for overclocking and extreme connectivity.", futureProof: 92 },
+];
+
+const psuDatabase: PCComponent[] = [
+  { name: "PSU", model: "Ant Esports VS500L", price: 2200, brand: "Ant Esports", specs: "500W, Basic", whyChosen: "Ultra-budget choice for general work.", futureProof: 40 },
+  { name: "PSU", model: "DeepCool PK550D", price: 3600, brand: "DeepCool", specs: "550W, 80+ Bronze", whyChosen: "Reliable power for entry-level gaming builds.", futureProof: 60 },
+  { name: "PSU", model: "Corsair RM750e", price: 9500, brand: "Corsair", specs: "750W, 80+ Gold, Modular", whyChosen: "Gold efficiency saves on high Indian electricity bills.", futureProof: 88 },
+  { name: "PSU", model: "Corsair RM1000x", price: 16500, brand: "Corsair", specs: "1000W, 80+ Gold", whyChosen: "Maximum headroom for high-end GPUs.", futureProof: 95 },
+];
+
+const coolingDatabase: PCComponent[] = [
+  { name: "Cooling", model: "Stock Cooler", price: 0, brand: "Generic", specs: "Included with CPU", whyChosen: "Zero cost, good for budget builds.", futureProof: 30 },
+  { name: "Cooling", model: "DeepCool AG400", price: 1800, brand: "DeepCool", specs: "Air Cooler, Single Tower", whyChosen: "Handles Indian summers much better than stock coolers.", futureProof: 70 },
+  { name: "Cooling", model: "DeepCool AK620", price: 5800, brand: "DeepCool", specs: "Dual Tower, 260W TDP", whyChosen: "Keeps high-end CPUs cool during heavy rendering.", futureProof: 85 },
+  { name: "Cooling", model: "Cooler Master MasterLiquid 360L", price: 9500, brand: "Cooler Master", specs: "360mm AIO Liquid", whyChosen: "Ultimate cooling for overclocked premium setups.", futureProof: 92 },
+];
+
+const cabinetDatabase: PCComponent[] = [
+  { name: "Cabinet", model: "Ant Esports ICE-120", price: 2500, brand: "Ant Esports", specs: "Mid Tower, RGB", whyChosen: "Popular budget pick with decent airflow.", futureProof: 50 },
+  { name: "Cabinet", model: "MSI Mag Forge 112R", price: 4800, brand: "MSI", specs: "4 Fans included, Mesh", whyChosen: "Excellent airflow essential for tropical climates.", futureProof: 75 },
+  { name: "Cabinet", model: "Lian Li Lancool 216", price: 8200, brand: "Lian Li", specs: "High Airflow, Pro", whyChosen: "The gold standard for airflow and cable management.", futureProof: 90 },
+];
+
+function findBestComponent(database: PCComponent[], targetPrice: number): PCComponent {
+  // Sort by price descending
+  const sorted = [...database].sort((a, b) => b.price - a.price);
+
+  // Find the first one that is <= targetPrice
+  let best = sorted.find(c => c.price <= targetPrice);
+
+  // If nothing found, take the cheapest one
+  if (!best) {
+    best = sorted[sorted.length - 1];
+  }
+
+  return best;
+}
+
 function getBudgetRange(budget: number): "entry" | "mid" | "high" | "premium" {
-  if (budget < 40000) return "entry";
-  if (budget < 80000) return "mid";
-  if (budget < 150000) return "high";
+  if (budget < 45000) return "entry";
+  if (budget < 85000) return "mid";
+  if (budget < 160000) return "high";
   return "premium";
 }
 
 function getUseCaseCategory(profile: UserProfile): string {
   const useCase = profile.primaryUseCase?.toLowerCase() || "";
   const interests = profile.interests || [];
-  
+
   if (useCase.includes("gaming") || interests.includes("gaming")) return "gaming";
   if (useCase.includes("ai") || useCase.includes("ml") || profile.aiMlInterest) return "aiml";
   if (useCase.includes("creat") || useCase.includes("edit") || interests.includes("video editing")) return "creator";
@@ -101,104 +183,63 @@ function getUseCaseCategory(profile: UserProfile): string {
 
 export function generatePCBuild(profile: UserProfile): PCBuild {
   const budget = profile.budget || 60000;
-  const budgetRange = getBudgetRange(budget);
   const category = getUseCaseCategory(profile);
+  const budgetRange = getBudgetRange(budget);
 
   // Intelligent component allocation based on use case
   const allocations = {
-    gaming: { cpu: 0.22, gpu: 0.35, ram: 0.10, storage: 0.08, mb: 0.10, psu: 0.07, cooling: 0.04, cabinet: 0.04 },
-    aiml: { cpu: 0.25, gpu: 0.38, ram: 0.15, storage: 0.10, mb: 0.05, psu: 0.04, cooling: 0.02, cabinet: 0.01 },
-    creator: { cpu: 0.28, gpu: 0.30, ram: 0.15, storage: 0.12, mb: 0.07, psu: 0.04, cooling: 0.03, cabinet: 0.01 },
-    startup: { cpu: 0.30, gpu: 0.10, ram: 0.20, storage: 0.15, mb: 0.12, psu: 0.06, cooling: 0.04, cabinet: 0.03 },
-    engineering: { cpu: 0.28, gpu: 0.15, ram: 0.20, storage: 0.15, mb: 0.10, psu: 0.06, cooling: 0.04, cabinet: 0.02 },
-    streaming: { cpu: 0.25, gpu: 0.30, ram: 0.12, storage: 0.12, mb: 0.09, psu: 0.06, cooling: 0.04, cabinet: 0.02 },
-    general: { cpu: 0.25, gpu: 0.20, ram: 0.15, storage: 0.15, mb: 0.12, psu: 0.07, cooling: 0.04, cabinet: 0.02 },
+    gaming: { cpu: 0.20, gpu: 0.38, ram: 0.08, storage: 0.08, mb: 0.12, psu: 0.06, cooling: 0.04, cabinet: 0.04 },
+    aiml: { cpu: 0.22, gpu: 0.42, ram: 0.12, storage: 0.08, mb: 0.08, psu: 0.04, cooling: 0.02, cabinet: 0.02 },
+    creator: { cpu: 0.30, gpu: 0.25, ram: 0.15, storage: 0.12, mb: 0.08, psu: 0.05, cooling: 0.03, cabinet: 0.02 },
+    startup: { cpu: 0.35, gpu: 0.10, ram: 0.20, storage: 0.15, mb: 0.10, psu: 0.05, cooling: 0.03, cabinet: 0.02 },
+    engineering: { cpu: 0.32, gpu: 0.18, ram: 0.18, storage: 0.12, mb: 0.10, psu: 0.05, cooling: 0.03, cabinet: 0.02 },
+    streaming: { cpu: 0.28, gpu: 0.30, ram: 0.12, storage: 0.10, mb: 0.08, psu: 0.06, cooling: 0.04, cabinet: 0.02 },
+    general: { cpu: 0.30, gpu: 0.15, ram: 0.15, storage: 0.15, mb: 0.12, psu: 0.07, cooling: 0.03, cabinet: 0.03 },
   };
 
   const alloc = allocations[category as keyof typeof allocations] || allocations.general;
 
-  // Component databases with Indian pricing
-  const cpuOptions = {
-    entry: { name: "CPU", model: "AMD Ryzen 5 5600", price: 13000, brand: "AMD", specs: "6C/12T, 3.5-4.4GHz, 65W TDP", whyChosen: "Best budget CPU for Indian users — unmatched performance per rupee", futureProof: 72 },
-    mid: { name: "CPU", model: "AMD Ryzen 5 7600X", price: 22000, brand: "AMD", specs: "6C/12T, 4.7-5.3GHz, AM5 platform", whyChosen: "AM5 platform ensures upgrade path for years — future-proof investment", futureProof: 85 },
-    high: { name: "CPU", model: "AMD Ryzen 7 7700X", price: 32000, brand: "AMD", specs: "8C/16T, 4.5-5.4GHz, AM5 socket", whyChosen: "Ideal for creators and engineers — handles multitasking with ease", futureProof: 88 },
-    premium: { name: "CPU", model: "Intel Core i9-13900K", price: 55000, brand: "Intel", specs: "24C/32T, up to 5.8GHz, DDR5 ready", whyChosen: "India's most powerful consumer CPU for AI/ML and 3D rendering workflows", futureProof: 90 },
+  // Select components dynamically
+  const cpu = findBestComponent(cpuDatabase, budget * alloc.cpu);
+  const gpu = category !== "startup" ? findBestComponent(gpuDatabase, budget * alloc.gpu) : undefined;
+  const ram = findBestComponent(ramDatabase, budget * alloc.ram);
+  const storage = findBestComponent(storageDatabase, budget * alloc.storage);
+  const motherboard = findBestComponent(mbDatabase, budget * alloc.mb);
+  const psu = findBestComponent(psuDatabase, budget * alloc.psu);
+  const cooling = findBestComponent(coolingDatabase, budget * alloc.cooling);
+  const cabinet = findBestComponent(cabinetDatabase, budget * alloc.cabinet);
+
+  const totalCost = cpu.price + (gpu?.price || 0) + ram.price + storage.price + motherboard.price + psu.price + cooling.price + cabinet.price;
+
+  // City-specific advice for usefulness
+  const cityAdvice: Record<string, string> = {
+    "Bangalore": "Pro-tip: Visit SP Road for the best offline deals. Stores like Ankit Infotech or Super Computers are highly rated.",
+    "Mumbai": "Check Lamington Road for competitive pricing. PrimeABGB is the gold standard for high-end components there.",
+    "Delhi": "Nehru Place is your destination. Cost-to-Cost is famous, but compare with SMC International for premium parts.",
+    "Chennai": "Ritchie Street is where you'll find the best hardware deals. Oasis IT is a reliable choice.",
+    "Hyderabad": "Chenoy Trade Center (CTC) in Secunderabad is the tech hub for your build.",
+    "Kolkata": "Chandni Chowk area is the best place to source components offline at great prices.",
+    "Pune": "Tilak Road and nearby areas have several reliable vendors like DataCare Corporation.",
   };
 
-  const gpuOptions = {
-    entry: { name: "GPU", model: "NVIDIA RTX 3060 12GB", price: 28000, brand: "NVIDIA", specs: "12GB GDDR6, 3584 CUDA cores, 170W", whyChosen: "Best 1080p gaming GPU in India under ₹30K — DLSS 2.0 support", futureProof: 70 },
-    mid: { name: "GPU", model: "NVIDIA RTX 4060 8GB", price: 35000, brand: "NVIDIA", specs: "8GB GDDR6, 3072 CUDA cores, 115W efficient", whyChosen: "DLSS 3 Frame Generation + Ada architecture — future AAA gaming ready", futureProof: 82 },
-    high: { name: "GPU", model: "NVIDIA RTX 4070 12GB", price: 55000, brand: "NVIDIA", specs: "12GB GDDR6X, 5888 CUDA cores, 200W", whyChosen: "1440p/4K gaming + AI/ML CUDA workloads — professional grade value", futureProof: 88 },
-    premium: { name: "GPU", model: "NVIDIA RTX 4080 SUPER 16GB", price: 95000, brand: "NVIDIA", specs: "16GB GDDR6X, 10240 CUDA cores, 320W", whyChosen: "India's best GPU for AI training, 4K gaming, and professional VFX", futureProof: 93 },
-  };
-
-  const ramOptions = {
-    entry: { name: "RAM", model: "Corsair Vengeance DDR4 16GB (2x8)", price: 4500, brand: "Corsair", specs: "DDR4-3200, CL16, dual channel", whyChosen: "Dual channel setup maximizes CPU bandwidth for budget builds", futureProof: 65 },
-    mid: { name: "RAM", model: "G.Skill Trident Z5 DDR5 32GB", price: 9500, brand: "G.Skill", specs: "DDR5-5600, CL36, low latency", whyChosen: "DDR5 future-proofs your system for next-gen software requirements", futureProof: 88 },
-    high: { name: "RAM", model: "Kingston Fury Beast DDR5 32GB", price: 12000, brand: "Kingston", specs: "DDR5-5200, 32GB dual channel", whyChosen: "32GB DDR5 handles AI/ML datasets, video editing, and VMs simultaneously", futureProof: 90 },
-    premium: { name: "RAM", model: "G.Skill Trident Z5 DDR5 64GB", price: 22000, brand: "G.Skill", specs: "DDR5-6000, 64GB, XMP 3.0", whyChosen: "64GB enables large AI model training and professional 3D rendering", futureProof: 95 },
-  };
-
-  const storageOptions = {
-    entry: { name: "Storage", model: "Samsung 980 NVMe 500GB + Seagate 1TB HDD", price: 5000, brand: "Samsung", specs: "NVMe PCIe 3.0, 3500MB/s + 7200RPM HDD", whyChosen: "NVMe OS drive + HDD combo maximizes speed and storage value", futureProof: 68 },
-    mid: { name: "Storage", model: "Samsung 980 Pro NVMe 1TB", price: 8000, brand: "Samsung", specs: "PCIe 4.0, 7000MB/s read, 5000MB/s write", whyChosen: "PCIe 4.0 NVMe dramatically improves game load times and file transfers", futureProof: 83 },
-    high: { name: "Storage", model: "WD Black SN850X 1TB + Samsung 870 EVO 2TB", price: 14000, brand: "WD + Samsung", specs: "PCIe 4.0 NVMe + SATA SSD combo", whyChosen: "Primary NVMe for speed + SSD archive — no HDD noise or heat", futureProof: 87 },
-    premium: { name: "Storage", model: "Samsung 990 Pro NVMe 2TB", price: 20000, brand: "Samsung", specs: "PCIe 4.0, 7450MB/s read, optimized thermal", whyChosen: "2TB high-speed NVMe for professional AI datasets and content creation", futureProof: 92 },
-  };
-
-  const mbOptions = {
-    entry: { name: "Motherboard", model: "MSI B550M Pro-VDH WiFi", price: 8500, brand: "MSI", specs: "AM4, PCIe 4.0, M.2, WiFi 5, ATX", whyChosen: "Reliable Indian market bestseller — good VRM for stable overclocking", futureProof: 70 },
-    mid: { name: "Motherboard", model: "ASUS ROG Strix B650-A Gaming WiFi", price: 18000, brand: "ASUS", specs: "AM5, DDR5, PCIe 5.0, WiFi 6E", whyChosen: "AM5 future platform + WiFi 6E ensures compatibility for years ahead", futureProof: 88 },
-    high: { name: "Motherboard", model: "MSI MAG X670E Tomahawk WiFi", price: 25000, brand: "MSI", specs: "AM5, X670E chipset, PCIe 5.0, USB 3.2 Gen2", whyChosen: "X670E gives maximum connectivity — perfect for professional workstations", futureProof: 90 },
-    premium: { name: "Motherboard", model: "ASUS ROG Maximus Z790 Hero", price: 45000, brand: "ASUS", specs: "LGA1700, DDR5, Thunderbolt 4, 20+1 power stages", whyChosen: "Extreme VRM for overclocking — built for India's demanding power users", futureProof: 92 },
-  };
-
-  const psuOptions = {
-    entry: { name: "PSU", model: "Corsair CV550 80+ Bronze", price: 3500, brand: "Corsair", specs: "550W, 80+ Bronze, active PFC", whyChosen: "Reliable and efficient — handles budget builds with headroom for upgrades", futureProof: 72 },
-    mid: { name: "PSU", model: "Cooler Master MWE Gold 650W", price: 5500, brand: "Cooler Master", specs: "650W, 80+ Gold, 5-year warranty", whyChosen: "80+ Gold efficiency saves ₹2000+ annually on Indian electricity bills", futureProof: 82 },
-    high: { name: "PSU", model: "Seasonic Focus GX-750 ATX 3.0", price: 9000, brand: "Seasonic", specs: "750W, 80+ Gold, fully modular, PCIe 5.0", whyChosen: "Fully modular reduces cable clutter — perfect for clean workstation builds", futureProof: 88 },
-    premium: { name: "PSU", model: "Corsair HX1000i 80+ Platinum", price: 16000, brand: "Corsair", specs: "1000W, 80+ Platinum, digital monitoring", whyChosen: "Platinum efficiency + digital monitoring — maximum savings on power bills", futureProof: 92 },
-  };
-
-  const coolingOptions = {
-    entry: { name: "Cooling", model: "Cooler Master Hyper 212 Black", price: 2500, brand: "Cooler Master", specs: "Single tower, 120mm fan, 150W TDP support", whyChosen: "India's most trusted budget cooler — handles Indian summers efficiently", futureProof: 75 },
-    mid: { name: "Cooling", model: "DeepCool AK400", price: 3500, brand: "DeepCool", specs: "Dual tower, 4 heatpipes, 240W TDP", whyChosen: "Superior thermal performance keeps Indian summer temperatures in check", futureProof: 82 },
-    high: { name: "Cooling", model: "NZXT Kraken X63 AIO 280mm", price: 9000, brand: "NZXT", specs: "280mm AIO, dual 140mm fans, LCD display", whyChosen: "AIO liquid cooling — handles high TDP CPUs during extended workloads", futureProof: 86 },
-    premium: { name: "Cooling", model: "Corsair iCUE H150i Elite LCD 360mm", price: 14000, brand: "Corsair", specs: "360mm AIO, 3x120mm fans, LCD pump head", whyChosen: "Maximum heat dissipation for overclocked systems in tropical Indian climate", futureProof: 90 },
-  };
-
-  const cabinetOptions = {
-    entry: { name: "Cabinet", model: "Ant Esports ICE-511MT", price: 2800, brand: "Ant Esports", specs: "Mid-tower, mesh front, 4 ARGB fans included", whyChosen: "Best value Indian cabinet — includes 4 fans and excellent airflow design", futureProof: 72 },
-    mid: { name: "Cabinet", model: "Lian Li LANCOOL 216 RGB", price: 6500, brand: "Lian Li", specs: "Mid-tower, dual 160mm fans, mesh design", whyChosen: "German engineering at Indian price — superior airflow reduces temperatures by 8°C", futureProof: 84 },
-    high: { name: "Cabinet", model: "Fractal Design Meshify 2", price: 10000, brand: "Fractal Design", specs: "Mid-tower, 3x140mm fans, tempered glass", whyChosen: "Industrial-grade airflow design — professional workstation aesthetic", futureProof: 88 },
-    premium: { name: "Cabinet", model: "Lian Li O11 Dynamic EVO", price: 14000, brand: "Lian Li", specs: "Mid-tower, dual chamber, multiple radiator slots", whyChosen: "Iconic design with ultimate cooling flexibility for premium Indian setups", futureProof: 92 },
-  };
-
-  const cpu = cpuOptions[budgetRange];
-  const gpu = category !== "startup" && category !== "engineering" ? gpuOptions[budgetRange] : gpuOptions.entry;
-  const ram = ramOptions[budgetRange];
-  const storage = storageOptions[budgetRange];
-  const mb = mbOptions[budgetRange];
-  const psu = psuOptions[budgetRange];
-  const cooling = coolingOptions[budgetRange];
-  const cabinet = cabinetOptions[budgetRange];
-
-  const totalCost = cpu.price + (gpu?.price || 0) + ram.price + storage.price + mb.price + psu.price + cooling.price + cabinet.price;
+  const environmentAdvice = profile.electricityStability === "unstable"
+    ? "⚠️ Due to unstable power in your area, an Online UPS (1KVA+) is MANDATORY to protect your components."
+    : profile.electricityStability === "moderate"
+      ? "💡 Periodic power cuts detected: A basic 600VA-1100VA UPS is highly recommended for data safety."
+      : "✅ Your power is stable, but a basic surge protector is still a smart ₹500 investment.";
 
   // Gaming FPS estimates
   const gamingFps: Record<string, number> = {};
-  if (category === "gaming" || profile.interests?.includes("gaming")) {
-    const gpuTier = { entry: 1, mid: 2, high: 3, premium: 4 }[budgetRange] || 1;
-    gamingFps["Valorant (1080p)"] = 120 + gpuTier * 80;
-    gamingFps["CS2 (1080p)"] = 100 + gpuTier * 70;
-    gamingFps["GTA V (1080p Ultra)"] = 60 + gpuTier * 30;
-    gamingFps["Cyberpunk 2077 (1080p High)"] = 35 + gpuTier * 20;
-    gamingFps["PUBG (1080p)"] = 80 + gpuTier * 50;
-    gamingFps["FC 24 (1080p)"] = 90 + gpuTier * 60;
+  if (gpu) {
+    const gpuPower = gpu.price / 1000;
+    gamingFps["Valorant (1080p)"] = Math.round(150 + gpuPower * 10);
+    gamingFps["CS2 (1080p)"] = Math.round(120 + gpuPower * 8);
+    gamingFps["GTA V (1080p)"] = Math.round(60 + gpuPower * 4);
+    gamingFps["Cyberpunk 2077"] = Math.round(30 + gpuPower * 1.5);
   }
 
-  const powerConsumption = (cpu.price / 500) + (gpu?.price / 300 || 0) + 150;
-  const monthlyElectricityCost = Math.round((powerConsumption * 8 * 30 * 6.5) / 1000);
+  const powerConsumption = Math.round((cpu.price / 400) + (gpu?.price / 250 || 0) + 120);
+  const monthlyElectricityCost = Math.round((powerConsumption * 6 * 30 * 7.5) / 1000); // 6 hrs/day, 7.5 per unit avg
 
   const titles = {
     gaming: "🎮 The Indian Gaming Beast",
@@ -211,50 +252,35 @@ export function generatePCBuild(profile: UserProfile): PCBuild {
   };
 
   const taglines = {
-    gaming: "Dominate every Indian server. Built for the future of gaming.",
-    aiml: "Train models. Run inference. Shape the future of Indian AI.",
-    creator: "4K edit. Export fast. Create without limits.",
-    startup: "Your startup deserves hardware that matches your ambition.",
-    engineering: "Simulate, compile, and innovate — at the speed of thought.",
-    streaming: "Stream to India. Build your audience. Perform flawlessly.",
-    general: "The perfect Indian all-rounder — value, power, and reliability.",
+    gaming: "Dominate every Indian server. Low latency, high performance.",
+    aiml: "Train models. Run inference. The future of Bharat AI is here.",
+    creator: "Edit 4K, export faster. Built for India's creator economy.",
+    startup: "Scalable hardware for a scalable vision. Build your unicorn.",
+    engineering: "Simulate and design without bottlenecks. Engineer's pride.",
+    streaming: "Broadcast to millions. Flawless multitasking for streamers.",
+    general: "Reliability meets performance. The perfect Indian daily driver.",
   };
 
   const futureProofScore = Math.round((cpu.futureProof + (gpu?.futureProof || 70) + ram.futureProof + storage.futureProof) / 4);
-  const valueScore = Math.round(100 - (Math.abs(totalCost - budget) / budget) * 30);
-  const performanceScore = Math.min(95, Math.round(futureProofScore * 1.05));
-  const thermalScore = Math.round((cooling.futureProof + cabinet.futureProof) / 2);
+  const valueScore = Math.round(100 - (Math.abs(totalCost - budget) / budget) * 40);
 
-  const bottlenecks: string[] = [];
-  const strengths: string[] = [];
+  const strengths = [
+    `Optimized for ${profile.city || "your city"}'s market availability`,
+    `${futureProofScore}% future-proof rating — solid investment for 4+ years`,
+    psu.model.includes("Gold") ? "Gold-rated PSU reduces monthly power bills significantly" : "Reliable power delivery for Indian voltage fluctuations",
+  ];
 
-  if (category === "gaming" && budgetRange === "entry") {
-    bottlenecks.push("GPU may struggle with 4K AAA titles post-2025");
-    bottlenecks.push("16GB RAM limits multitasking during streaming");
-  }
-  if (category === "aiml" && budgetRange !== "premium") {
-    bottlenecks.push("VRAM may limit training large language models locally");
-    bottlenecks.push("Consider cloud GPU (Vast.AI/Lambda Labs) for large training runs");
+  if (cityAdvice[profile.city as string]) {
+    strengths.push(cityAdvice[profile.city as string]);
   }
 
-  strengths.push(`Outstanding ₹-to-performance ratio for Indian market`);
-  strengths.push(`${futureProofScore}% future-proof rating — solid investment`);
-  if (psu.model.includes("Gold") || psu.model.includes("Platinum")) {
-    strengths.push(`80+ certified PSU saves ₹${Math.round(monthlyElectricityCost * 0.2 * 12)}/year on electricity`);
-  }
-
-  const aiInsights = {
-    gaming: `Namaste! 🙏 Your gaming setup is intelligently calibrated for the Indian gaming ecosystem. This build will handle Valorant at ${gamingFps["Valorant (1080p)"]}+ FPS — enough to compete at a professional level. The ${gpu?.model} supports DLSS which gives you free performance gains in supported titles. Your upgrade path: add a second RAM stick in 2 years, then GPU upgrade in 3 years. Total investment protection: ~${futureProofScore}% relevance in 2027.`,
-    aiml: `Your AI/ML journey starts here. This workstation is optimized for PyTorch, TensorFlow, and Jupyter workflows. The ${gpu?.model} with CUDA cores enables local inference and small model training. For large LLM training, pair this with cloud GPUs. The ${ram.model} ensures smooth multi-environment work. This build will serve IIT/NIT-level AI research for the next ${Math.round(futureProofScore / 15)} years.`,
-    creator: `Built for India's growing creator economy. The ${cpu.model} excels at video export via hardware encoding. Your ${storage.model} ensures DaVinci Resolve and Premiere Pro open projects in seconds. This workstation handles 4K timeline editing without proxy files — a professional workflow at Indian budget pricing.`,
-    general: `Designed specifically for the Indian market — this build maximizes every rupee. The component selection prioritizes longevity, repairability, and upgrade flexibility. All components are widely available at major Indian retailers including Amazon.in, Flipkart, and MD Computers.`,
-  };
+  const aiInsight = `Namaste ${profile.name || "friend"}! 🙏 For your budget of ₹${budget.toLocaleString('en-IN')}, I've designed a system that maximizes every rupee. ${gpu ? `The ${gpu.model} is a strategic choice for ${category}, offering high CUDA performance for AI or frame rates for gaming.` : `I've prioritized CPU and RAM for your ${category} needs.`} ${environmentAdvice} This build will serve you excellently for ${Math.round(futureProofScore / 15)} years.`;
 
   const upgradeTimelines = {
-    entry: "Year 2: Add 16GB RAM | Year 3: Upgrade GPU to RTX 4060 | Year 4: Consider CPU upgrade",
-    mid: "Year 2: Add storage SSD | Year 3: GPU upgrade to RTX 5070 | Year 4: Full platform refresh",
-    high: "Year 3: GPU upgrade | Year 4-5: Full system refresh with next-gen platform",
-    premium: "Year 4-5: Full next-gen platform refresh — you're future-proof until 2029+",
+    entry: "Year 2: Add 8GB RAM | Year 3: Entry-level GPU upgrade",
+    mid: "Year 2: Add 1TB SSD | Year 4: Mid-range GPU refresh",
+    high: "Year 3: GPU upgrade | Year 5: Full platform refresh",
+    premium: "You are future-proof until 2028-29. Minor storage additions only.",
   };
 
   return {
@@ -262,24 +288,24 @@ export function generatePCBuild(profile: UserProfile): PCBuild {
     tagline: taglines[category as keyof typeof taglines] || taglines.general,
     totalCost,
     cpu,
-    gpu: category !== "startup" ? gpu : undefined,
+    gpu,
     ram,
     storage,
-    motherboard: mb,
+    motherboard,
     psu,
     cooling,
     cabinet,
     futureProofScore,
     valueScore: Math.min(98, valueScore),
-    performanceScore,
-    thermalScore,
+    performanceScore: Math.min(99, Math.round(futureProofScore * 1.02)),
+    thermalScore: cooling.model === "Stock Cooler" ? 65 : 85,
     estimatedLifespan: Math.round(futureProofScore / 15),
     upgradeTimeline: upgradeTimelines[budgetRange],
-    bottlenecks,
+    bottlenecks: totalCost < budget * 0.8 ? ["Budget left on table — consider a better GPU", "RAM could be higher for heavy multitasking"] : [],
     strengths,
-    aiInsight: aiInsights[category as keyof typeof aiInsights] || aiInsights.general,
+    aiInsight,
     gamingFps,
-    powerConsumption: Math.round(powerConsumption),
+    powerConsumption,
     monthlyElectricityCost,
   };
 }
@@ -288,95 +314,21 @@ export function generateLaptopRecommendations(profile: UserProfile): LaptopRecom
   const budget = profile.budget || 60000;
   const category = getUseCaseCategory(profile);
 
-  const laptops: LaptopRecommendation[] = [];
+  const allLaptops: LaptopRecommendation[] = [
+    { title: "Budget Student Pick", brand: "Lenovo", model: "IdeaPad Slim 3", price: 34500, specs: { cpu: "Ryzen 3 7320U", ram: "8GB", storage: "512GB SSD", display: "15.6\" FHD", battery: "42Wh", weight: "1.6kg" }, whyPerfect: "Affordable and reliable for college work.", futureProofScore: 55, valueScore: 90, bestFor: ["Students", "Office"], limitations: ["Basic performance"], aiInsight: "Great for entry-level coding and study." },
+    { title: "Value King", brand: "Acer", model: "Swift Go 14", price: 58000, specs: { cpu: "Core i5-13500H", ram: "16GB", storage: "512GB SSD", display: "14\" OLED 90Hz", battery: "65Wh", weight: "1.25kg" }, whyPerfect: "Best OLED display at this price point.", futureProofScore: 78, valueScore: 95, bestFor: ["Creators", "Students"], limitations: ["Average speakers"], aiInsight: "OLED screen is a game changer for creators." },
+    { title: "Gaming Starter", brand: "HP", model: "Victus 15", price: 62000, specs: { cpu: "Ryzen 5 5600H", gpu: "RTX 3050 4GB", ram: "16GB", storage: "512GB SSD", display: "15.6\" 144Hz", battery: "70Wh", weight: "2.3kg" }, whyPerfect: "Best entry-level gaming laptop with HP service support.", futureProofScore: 70, valueScore: 88, bestFor: ["Gaming", "Engineers"], limitations: ["Bulkier build"], aiInsight: "Ideal for first-year engineering students." },
+    { title: "Performance Pro", brand: "ASUS", model: "ROG Zephyrus G14", price: 89000, specs: { cpu: "Ryzen 7 7735HS", gpu: "RTX 4050 6GB", ram: "16GB", storage: "512GB SSD", display: "14\" QHD 165Hz", battery: "76Wh", weight: "1.65kg" }, whyPerfect: "Incredible power-to-weight ratio.", futureProofScore: 85, valueScore: 85, bestFor: ["AI/ML", "Gaming"], limitations: ["Gets hot"], aiInsight: "Best portable powerhouse for ML students." },
+    { title: "The Workstation", brand: "Apple", model: "MacBook Air M3", price: 114000, specs: { cpu: "Apple M3 Chip", ram: "16GB Unified", storage: "512GB SSD", display: "13.6\" Liquid Retina", battery: "18 hrs", weight: "1.24kg" }, whyPerfect: "Unbeatable battery life and efficiency.", futureProofScore: 92, valueScore: 82, bestFor: ["Development", "Startup Founders"], limitations: ["Expensive upgrades"], aiInsight: "The standard for modern software development." },
+    { title: "Ultimate Beast", brand: "ASUS", model: "ROG Strix SCAR 16", price: 235000, specs: { cpu: "i9-14900HX", gpu: "RTX 4080 12GB", ram: "32GB", storage: "1TB SSD", display: "16\" QHD Mini-LED", battery: "90Wh", weight: "2.6kg" }, whyPerfect: "Desktop-grade performance in a laptop.", futureProofScore: 96, valueScore: 75, bestFor: ["VFX", "Top-tier Gaming"], limitations: ["Very heavy", "Expensive"], aiInsight: "Eliminates hardware as a bottleneck for any task." },
+  ];
 
-  if (budget < 50000) {
-    laptops.push({
-      title: "Best Budget Pick for India",
-      brand: "Lenovo",
-      model: "IdeaPad Slim 3 (AMD Ryzen 5 7520U)",
-      price: 38000,
-      specs: { cpu: "AMD Ryzen 5 7520U", ram: "8GB DDR5 (upgradeable)", storage: "512GB NVMe SSD", display: "15.6\" FHD IPS, 60Hz", battery: "45Wh, up to 7hrs", weight: "1.62kg" },
-      whyPerfect: "Excellent battery life for college use + upgradeable RAM slot",
-      futureProofScore: 68,
-      valueScore: 88,
-      bestFor: ["Students", "Office work", "Light coding", "College assignments"],
-      limitations: ["No dedicated GPU", "Limited gaming capability", "65Hz display"],
-      aiInsight: "For engineering students in India, this laptop paired with cloud computing (AWS Free Tier) gives you a complete development environment at the lowest possible cost.",
-    });
+  // Filter and sort by closeness to budget (within +15k range, but prioritize lower or equal)
+  const filtered = allLaptops
+    .filter(l => l.price <= budget * 1.15) // Allow slightly over budget for better value
+    .sort((a, b) => Math.abs(a.price - budget) - Math.abs(b.price - budget));
 
-    laptops.push({
-      title: "Value Champion",
-      brand: "ASUS",
-      model: "VivoBook 15 (Ryzen 5 5500U)",
-      price: 42000,
-      specs: { cpu: "AMD Ryzen 5 5500U", ram: "8GB DDR4 (expandable to 32GB)", storage: "512GB NVMe", display: "15.6\" FHD, 60Hz, anti-glare", battery: "50Wh", weight: "1.8kg" },
-      whyPerfect: "ASUS service centers across India — reliable warranty support",
-      futureProofScore: 65,
-      valueScore: 85,
-      bestFor: ["Students", "Programming", "Document work"],
-      limitations: ["No GPU", "Average display"],
-      aiInsight: "ASUS has one of the best service networks in India — crucial for college students who need quick repairs.",
-    });
-  } else if (budget < 80000) {
-    laptops.push({
-      title: "Best Mid-Range Indian Pick",
-      brand: "ASUS",
-      model: "ROG Zephyrus G14 (Ryzen 7 7745HX + RTX 4060)",
-      price: 75000,
-      specs: { cpu: "AMD Ryzen 7 7745HX", gpu: "NVIDIA RTX 4060 8GB", ram: "16GB DDR5", storage: "1TB NVMe PCIe 4.0", display: "14\" QHD 165Hz", battery: "73Wh, ~6hrs light use", weight: "1.65kg" },
-      whyPerfect: "Best gaming + creator laptop under ₹80K — RTX 4060 handles everything",
-      futureProofScore: 84,
-      valueScore: 90,
-      bestFor: ["Gaming", "Video editing", "3D modeling", "AI/ML students"],
-      limitations: ["Shorter battery under gaming load", "Premium price"],
-      aiInsight: "For Indian students doing AI/ML + gaming + content creation, this is the ultimate value proposition. The RTX 4060 supports CUDA for small-scale ML training.",
-    });
-
-    laptops.push({
-      title: "Creator's Dream Under ₹70K",
-      brand: "HP",
-      model: "Victus 16 (i7-12700H + RTX 4060)",
-      price: 68000,
-      specs: { cpu: "Intel Core i7-12700H", gpu: "NVIDIA RTX 4060 8GB", ram: "16GB DDR5", storage: "512GB NVMe SSD", display: "16.1\" FHD 144Hz IPS", battery: "70Wh", weight: "2.3kg" },
-      whyPerfect: "HP's excellent India service network + powerful specifications",
-      futureProofScore: 80,
-      valueScore: 87,
-      bestFor: ["Gaming", "Content creation", "Engineering software"],
-      limitations: ["Heavier build", "Single SSD slot"],
-      aiInsight: "HP has 500+ service centers across India — ideal if you're in Tier 2/3 cities where warranty support matters most.",
-    });
-  } else if (budget < 130000) {
-    laptops.push({
-      title: "The Professional's Choice",
-      brand: "ASUS",
-      model: "ROG Zephyrus G15 (Ryzen 9 7945HX + RTX 4070)",
-      price: 115000,
-      specs: { cpu: "AMD Ryzen 9 7945HX", gpu: "NVIDIA RTX 4070 8GB", ram: "32GB DDR5", storage: "1TB NVMe PCIe 4.0", display: "15.6\" QHD 240Hz", battery: "90Wh", weight: "1.9kg" },
-      whyPerfect: "Workstation-class performance in a portable form factor",
-      futureProofScore: 89,
-      valueScore: 88,
-      bestFor: ["AI/ML research", "4K video editing", "Professional gaming", "Startup founders"],
-      limitations: ["High price", "Gets hot under sustained load"],
-      aiInsight: "For IIT/NIT students in AI/ML programs, this laptop replaces a desktop workstation. The RTX 4070 with 8GB VRAM handles model fine-tuning and inference efficiently.",
-    });
-  } else {
-    laptops.push({
-      title: "The Ultimate Indian Powerhouse",
-      brand: "ASUS",
-      model: "ROG Zephyrus Duo 16 (Ryzen 9 + RTX 4090)",
-      price: 185000,
-      specs: { cpu: "AMD Ryzen 9 7945HX", gpu: "NVIDIA RTX 4090 16GB", ram: "64GB DDR5", storage: "2TB NVMe PCIe 4.0", display: "16\" QHD 165Hz + secondary 4K display", battery: "90Wh", weight: "2.5kg" },
-      whyPerfect: "Dual-screen productivity + RTX 4090 — no compromise, ever",
-      futureProofScore: 95,
-      valueScore: 85,
-      bestFor: ["AI/ML researchers", "VFX artists", "Game developers", "Top-tier creators"],
-      limitations: ["Very expensive", "Heavy", "Short battery life under load"],
-      aiInsight: "If you're building India's next unicorn or working on cutting-edge AI research, this machine eliminates hardware as a bottleneck entirely.",
-    });
-  }
-
-  return laptops;
+  return filtered.slice(0, 3);
 }
 
 export function getVoiceGreeting(profile: UserProfile): string {
@@ -404,14 +356,14 @@ export function getContextualAdvice(profile: UserProfile, context: string): stri
       `Your ₹${(budget / 1000).toFixed(0)}K budget is very strategic. I recommend spending 35% on GPU if you're gaming, or 25% on CPU if you're into AI/ML workloads.`,
     ],
     gaming: [
-      "Indian gaming is exploding! BGMI, Valorant, and FC24 are the most played games. An RTX 4060 handles all of them at ultra settings with DLSS enabled.",
+      "Indian gaming is exploding! BGMI, Valorant, and CS2 are the most played games. An RTX 4060 handles all of them at ultra settings with DLSS enabled.",
       "For competitive gaming in India, focus on high refresh rate (144Hz+) over resolution. 1080p at 144Hz beats 4K at 60Hz for competitive titles.",
       "Invest in a good monitor — Indian gamers often overspend on GPU and use a 60Hz display. That's a bottleneck that kills competitive performance.",
     ],
     aiml: [
-      "For AI/ML in India, VRAM is your most important resource. An RTX 4060 with 8GB VRAM can run LLaMA 2 7B locally — that's remarkable capability.",
+      "For AI/ML in India, VRAM is your most important resource. An RTX 3060 with 12GB VRAM is better than a 4060 with 8GB for training larger models.",
       "Indian AI students: use Google Colab Pro for training + local GPU for inference. This hybrid approach saves money while maximizing productivity.",
-      "The future belongs to AI engineers. Invest in a system with at least 32GB RAM and an RTX 4060+ for running local LLMs and ML pipelines.",
+      "The future belongs to AI engineers. Invest in a system with at least 32GB RAM and an RTX 4060 Ti 16GB+ for running local LLMs and ML pipelines.",
     ],
     engineering: [
       "For engineering students: MATLAB, AutoCAD, SolidWorks, and ANSYS all run best with a dedicated GPU and 16GB+ RAM. Don't compromise here.",
@@ -428,3 +380,4 @@ export function getContextualAdvice(profile: UserProfile, context: string): stri
   const relevantAdvice = adviceMap[category] || adviceMap.gaming;
   return relevantAdvice[Math.floor(Math.random() * relevantAdvice.length)];
 }
+
