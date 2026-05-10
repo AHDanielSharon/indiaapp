@@ -145,22 +145,157 @@ const cabinetDatabase: PCComponent[] = [
   { name: "Cabinet", model: "MSI Mag Forge 112R", price: 4800, brand: "MSI", specs: "4 Fans included, Mesh", whyChosen: "Excellent airflow essential for tropical climates.", futureProof: 75 },
   { name: "Cabinet", model: "Lian Li Lancool 216", price: 8200, brand: "Lian Li", specs: "High Airflow, Pro", whyChosen: "The gold standard for airflow and cable management.", futureProof: 90 },
 ];
+function calculateCompatibilityScore(
+  cpu: PCComponent,
+  gpu: PCComponent | undefined,
+  ram: PCComponent,
+  motherboard: PCComponent,
+  psu: PCComponent,
+  cooling: PCComponent
+): number {
 
-function findBestComponent(database: PCComponent[], targetPrice: number): PCComponent {
-  // Sort by price descending
-  const sorted = [...database].sort((a, b) => b.price - a.price);
+  let score = 100;
 
-  // Find the first one that is <= targetPrice
-  let best = sorted.find(c => c.price <= targetPrice);
-
-  // If nothing found, take the cheapest one
-  if (!best) {
-    best = sorted[sorted.length - 1];
+  // Prevent weak PSU for strong GPUs
+  if (
+    gpu &&
+    gpu.price > 70000 &&
+    psu.price < 8000
+  ) {
+    score -= 40;
   }
 
-  return best;
+  // Prevent weak cooling for powerful CPUs
+  if (
+    cpu.price > 35000 &&
+    cooling.model === "Stock Cooler"
+  ) {
+    score -= 35;
+  }
+
+  // Prevent low RAM for high-end systems
+  if (
+    cpu.price > 30000 &&
+    ram.price < 8000
+  ) {
+    score -= 25;
+  }
+
+  // Prevent cheap motherboard for premium CPUs
+  if (
+    cpu.price > 40000 &&
+    motherboard.price < 10000
+  ) {
+    score -= 35;
+  }
+
+  // Good balanced combinations
+  if (
+    gpu &&
+    gpu.model.includes("4070") &&
+    cpu.model.includes("Ryzen 7")
+  ) {
+    score += 30;
+  }
+
+  if (
+    gpu &&
+    gpu.model.includes("4060") &&
+    cpu.model.includes("i5")
+  ) {
+    score += 20;
+  }
+
+  return score;
 }
 
+function findBestComponent(
+  database: PCComponent[],
+  targetPrice: number,
+  profile?: UserProfile,
+  category?: string
+): PCComponent {
+
+  const scoredComponents = database.map(component => {
+
+    let score = 0;
+
+    const difference = Math.abs(targetPrice - component.price);
+
+    score += Math.max(
+      0,
+      100 - (difference / Math.max(targetPrice, 1)) * 100
+    );
+
+    score += component.futureProof * 2;
+
+    // AI/ML optimization
+    if (category === "aiml") {
+
+      if (component.model.includes("RTX")) score += 50;
+
+      if (component.model.includes("4090")) score += 120;
+      else if (component.model.includes("4080")) score += 90;
+      else if (component.model.includes("4070")) score += 70;
+      else if (component.model.includes("4060")) score += 50;
+      else if (component.model.includes("3060")) score += 30;
+
+      if (component.model.includes("16GB")) score += 35;
+
+      if (component.model.includes("DDR5")) score += 25;
+    }
+
+    // Gaming optimization
+    if (category === "gaming") {
+
+      if (component.model.includes("4070")) score += 70;
+
+      if (component.model.includes("4060")) score += 55;
+
+      if (component.model.includes("3060")) score += 40;
+    }
+
+    // Engineering optimization
+    if (category === "engineering") {
+
+      if (component.model.includes("Ryzen 7")) score += 40;
+
+      if (component.model.includes("32GB")) score += 30;
+
+      if (component.model.includes("1TB")) score += 20;
+    }
+
+    // Creator optimization
+    if (category === "creator") {
+
+      if (component.model.includes("4070")) score += 40;
+
+      if (component.model.includes("32GB")) score += 35;
+    }
+
+    // Startup optimization
+    if (category === "startup") {
+
+      if (component.model.includes("DDR5")) score += 20;
+
+      if (component.model.includes("Gold")) score += 20;
+    }
+
+    // Prevent weak builds
+    if (targetPrice > 50000 && component.futureProof < 60) {
+      score -= 50;
+    }
+
+    return {
+      component,
+      score
+    };
+  });
+
+  scoredComponents.sort((a, b) => b.score - a.score);
+
+  return scoredComponents[0].component;
+}
 function getBudgetRange(budget: number): "entry" | "mid" | "high" | "premium" {
   if (budget < 45000) return "entry";
   if (budget < 85000) return "mid";
@@ -200,15 +335,71 @@ export function generatePCBuild(profile: UserProfile): PCBuild {
   const alloc = allocations[category as keyof typeof allocations] || allocations.general;
 
   // Select components dynamically
-  const cpu = findBestComponent(cpuDatabase, budget * alloc.cpu);
-  const gpu = category !== "startup" ? findBestComponent(gpuDatabase, budget * alloc.gpu) : undefined;
-  const ram = findBestComponent(ramDatabase, budget * alloc.ram);
-  const storage = findBestComponent(storageDatabase, budget * alloc.storage);
-  const motherboard = findBestComponent(mbDatabase, budget * alloc.mb);
-  const psu = findBestComponent(psuDatabase, budget * alloc.psu);
-  const cooling = findBestComponent(coolingDatabase, budget * alloc.cooling);
-  const cabinet = findBestComponent(cabinetDatabase, budget * alloc.cabinet);
+  const cpu = findBestComponent(
+    cpuDatabase,
+    budget * alloc.cpu,
+    profile,
+    category
+  );
 
+  const gpu = category !== "startup"
+    ? findBestComponent(
+      gpuDatabase,
+      budget * alloc.gpu,
+      profile,
+      category
+    )
+    : undefined;
+
+  const ram = findBestComponent(
+    ramDatabase,
+    budget * alloc.ram,
+    profile,
+    category
+  );
+
+  const storage = findBestComponent(
+    storageDatabase,
+    budget * alloc.storage,
+    profile,
+    category
+  );
+
+  const motherboard = findBestComponent(
+    mbDatabase,
+    budget * alloc.mb,
+    profile,
+    category
+  );
+
+  const psu = findBestComponent(
+    psuDatabase,
+    budget * alloc.psu,
+    profile,
+    category
+  );
+
+  const cooling = findBestComponent(
+    coolingDatabase,
+    budget * alloc.cooling,
+    profile,
+    category
+  );
+
+  const cabinet = findBestComponent(
+    cabinetDatabase,
+    budget * alloc.cabinet,
+    profile,
+    category
+  );
+  const compatibilityScore = calculateCompatibilityScore(
+    cpu,
+    gpu,
+    ram,
+    motherboard,
+    psu,
+    cooling
+  );
   const totalCost = cpu.price + (gpu?.price || 0) + ram.price + storage.price + motherboard.price + psu.price + cooling.price + cabinet.price;
 
   // City-specific advice for usefulness
@@ -238,7 +429,13 @@ export function generatePCBuild(profile: UserProfile): PCBuild {
     gamingFps["Cyberpunk 2077"] = Math.round(30 + gpuPower * 1.5);
   }
 
-  const powerConsumption = Math.round((cpu.price / 400) + (gpu?.price / 250 || 0) + 120);
+  const gpuPowerUsage = gpu?.price ? gpu.price / 250 : 0;
+
+  const powerConsumption = Math.round(
+    (cpu.price / 400) +
+    gpuPowerUsage +
+    120
+  );
   const monthlyElectricityCost = Math.round((powerConsumption * 6 * 30 * 7.5) / 1000); // 6 hrs/day, 7.5 per unit avg
 
   const titles = {
@@ -265,9 +462,12 @@ export function generatePCBuild(profile: UserProfile): PCBuild {
   const valueScore = Math.round(100 - (Math.abs(totalCost - budget) / budget) * 40);
 
   const strengths = [
+    `Compatibility score: ${compatibilityScore}/100`,
     `Optimized for ${profile.city || "your city"}'s market availability`,
     `${futureProofScore}% future-proof rating — solid investment for 4+ years`,
-    psu.model.includes("Gold") ? "Gold-rated PSU reduces monthly power bills significantly" : "Reliable power delivery for Indian voltage fluctuations",
+    psu.model.includes("Gold")
+      ? "Gold-rated PSU reduces monthly power bills significantly"
+      : "Reliable power delivery for Indian voltage fluctuations",
   ];
 
   if (cityAdvice[profile.city as string]) {
@@ -297,7 +497,10 @@ export function generatePCBuild(profile: UserProfile): PCBuild {
     cabinet,
     futureProofScore,
     valueScore: Math.min(98, valueScore),
-    performanceScore: Math.min(99, Math.round(futureProofScore * 1.02)),
+    performanceScore: Math.min(
+      99,
+      Math.round((futureProofScore * 1.02) + (compatibilityScore / 8))
+    ),
     thermalScore: cooling.model === "Stock Cooler" ? 65 : 85,
     estimatedLifespan: Math.round(futureProofScore / 15),
     upgradeTimeline: upgradeTimelines[budgetRange],
